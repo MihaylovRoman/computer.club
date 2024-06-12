@@ -24,7 +24,7 @@ const Header = () => {
                     </div>
                     <p>Главная</p>
                 </NavLink>
-                <NavLink to='/price' className={({ isActive }) => isActive ? 'header-link activeLink' : 'header-link'}>
+                <NavLink to='/halls' className={({ isActive }) => isActive ? 'header-link activeLink' : 'header-link'}>
                     <div className='header-link__image'>
                         <img src={MonitorImage} alt="" />
                     </div>
@@ -39,7 +39,7 @@ const Header = () => {
             </div>
             <div className="user-controls">
                 {
-                    token ?
+                    token && user.role === 'USER' ?
                         (
                             <div className='user-balance'>
                                 <img src={BankCardImage} alt="" />
@@ -54,12 +54,17 @@ const Header = () => {
                         <ul>
                             {token ?
                                 (
-                                    <>
-                                        <li><NavLink to='/user-reservations'>Брони</NavLink></li>
-                                        <li><NavLink to='/reservation'>Забронировать</NavLink></li>
-                                        <li><NavLink to='/top-up-balance'>Пополнить баланс</NavLink></li>
-                                        <li><NavLink onClick={logoutUser} >Выход</NavLink></li>
-                                    </>
+                                    user.role === 'USER' ?
+                                        <>
+                                            <li><NavLink to='/user-reservations'>Брони</NavLink></li>
+                                            <li><NavLink to='/top-up-balance'>Пополнить баланс</NavLink></li>
+                                            <li><NavLink onClick={logoutUser} >Выход</NavLink></li>
+                                        </>:
+                                        <>
+                                            <li><NavLink to='/admin-panel'>Админ-панель</NavLink></li>
+                                            <li><NavLink onClick={logoutUser} >Выход</NavLink></li>
+                                        </> 
+                                    
                                 )
                                 :
                                 (

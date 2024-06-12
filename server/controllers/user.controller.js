@@ -78,11 +78,44 @@ class UserController {
             res.status(500).json({ message: 'Ошибка сервера' })
         }
     }
-    
+
+    async TopUpBalance(req, res) {
+        const { userId, money } = req.body
+        const user_id = parseInt(userId)
+        try {
+            if (!userId || !money) {
+                return res.status(400).json({ message: "Данные о пользователе не найдены" })
+            }
+            const currentUser = await prisma.user.findUnique({
+                where: {
+                    id: user_id
+                }
+            })
+            const updatedUser = await prisma.user.update({
+                where: {
+                    id: user_id
+                },
+                data: {
+                    balance: parseFloat(currentUser.balance) + parseFloat(money)
+                }
+            })
+            const token = generateJwt(updatedUser.id, updatedUser.role, updatedUser.name, updatedUser.balance)
+            res.json({token})
+
+        } catch (e) {
+            console.log("TopUpBalance error", e)
+            res.status(500).json({ message: "Ошибка пополнения баланса" })
+        }
+    }
+
+
+
+
     async check(req, res, next) {
         const { id, role, name, balance } = req.user
+        
         const token = generateJwt(id, role, name, balance)
-        return res.json({ token })
+        res.json({ token })
     }
 }
 
