@@ -1,0 +1,22 @@
+.errorMessage {
+    position: absolute;
+    font-size: 20px;
+    border-radius: 0px 25px 25px 0;
+    padding: 15px;
+    color: white;
+    top: 2%;
+    z-index: 6;
+    transition: left 0.5s ease;
+    left: -100%;
+    
+}
+
+.errorMessage.status-200 {
+    background: rgb(28, 151, 44);
+    left: 0;
+}
+
+.errorMessage.status-400 {
+    background: rgb(231, 75, 75);
+    left: 0;
+}
