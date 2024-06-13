@@ -5,7 +5,7 @@ module.exports = function (role) {
         const authHeader = req.headers['authorization']
 
         const token = authHeader && authHeader.split(' ')[1]
-
+        
         if (!token) return res.status(401).json({ message: "Не авторизован" })
 
         jwt.verify(token, process.env.SECRET_KEY, (err, user) => {

@@ -21,7 +21,7 @@ class HallController {
                 }
             })
             if (currentHall) {
-                return req.status(401).json({ message: "Название зала занято!" })
+                return res.status(401).json({ message: "Название зала занято!" })
             }
 
             const hall = await prisma.hall.create({

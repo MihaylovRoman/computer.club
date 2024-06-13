@@ -11,11 +11,21 @@ import { check } from './http/userAPI'
 import TopUpBalance from './pages/TopUpBalance/TopUpBalance'
 import AdminPanel from './pages/AdminPanel/AdminPanel'
 import HallAdd from './pages/HallAdd/HallAdd'
+import Halls from './pages/Halls/Halls'
+import { getAllHalls } from './http/hallAPI'
+import CurrentHall from './pages/CurrentHall/CurrentHall'
+import UserReservations from './pages/UserReservations/UserReservations'
 function App() {
 
   const { createError, isError, clearError } = useError()
   const { loginUser, logoutUser, user } = useUser()
   const [isLoading, setIsLoading] = useState(true)
+  const [halls, setHalls] = useState([])
+
+
+  useEffect(() => {
+    getAllHalls().then(data => setHalls(data)).catch()
+  }, [])
 
   useEffect(() => {
     setTimeout(() => {
@@ -36,6 +46,8 @@ function App() {
 
 
 
+
+
   useEffect(() => {
     if (isError.active) {
       const timer = setTimeout(() => {
@@ -51,7 +63,8 @@ function App() {
   }
 
   function AdminRoute({ children }) {
-    return user && user.role === 'ADMIN' ? children : <Navigate to='/' />
+    const token = localStorage.getItem('token')
+    return token && user.role === 'ADMIN' ? children : <Navigate to='/' />
   }
 
   if (isLoading) {
@@ -66,6 +79,9 @@ function App() {
       }
       <Header />
       <Routes>
+        <Route path='/halls' element={<Halls halls={halls} />} />
+        <Route path='/hall/:name' element={<CurrentHall />} />
+        <Route path='/user-reservations' element={<PrivateRoute><UserReservations /></PrivateRoute>} />
         <Route path='/register' element={<Register />} />
         <Route path='/login' element={<Login />} />
         <Route path='/top-up-balance' element={<PrivateRoute><TopUpBalance /></PrivateRoute>} />

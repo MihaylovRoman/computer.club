@@ -1,0 +1,45 @@
+.booked-wrapper {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    font-family: "Press Start 2P", system-ui;
+    margin: 20px 0px;
+}
+
+.booked-wrapper p {
+    margin: 5px;
+}
+
+.seat-scroll {
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.seat-number {
+    margin-right: 5px;
+    padding: 10px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.9);
+    border-radius: 50%;
+}
+
+.booked__complete {
+    background-color: rgb(43, 167, 94);
+}
+
+.booked__cancel {
+    background-color: rgb(196, 62, 62);
+}
+
+.booked__cancel,
+.booked__complete {
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-family: "Press Start 2P", system-ui;
+    width: 100%;
+    height: 40px;
+    margin: 5px 0;
+}

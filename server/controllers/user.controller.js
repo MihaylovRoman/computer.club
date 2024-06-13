@@ -100,7 +100,7 @@ class UserController {
                 }
             })
             const token = generateJwt(updatedUser.id, updatedUser.role, updatedUser.name, updatedUser.balance)
-            res.json({token})
+            res.json({ token })
 
         } catch (e) {
             console.log("TopUpBalance error", e)
@@ -108,12 +108,24 @@ class UserController {
         }
     }
 
+    async tokenUpdate(req, res) {
+        
+        const {id} = req.user
+        const user = await prisma.user.findUnique({
+            where: {
+                id
+            }
+        })
 
+        const token = generateJwt(user.id, user.role, user.name, user.balance)
+        res.json({ token })
+
+    }
 
 
     async check(req, res, next) {
         const { id, role, name, balance } = req.user
-        
+
         const token = generateJwt(id, role, name, balance)
         res.json({ token })
     }

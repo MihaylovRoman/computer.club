@@ -1,4 +1,5 @@
 .wrapperMenu{
+
     width: 100%;
     height: 100px;
     display: flex;
@@ -36,6 +37,7 @@
     transform: translateY(-12px);
 }
 .user-menu {
+    z-index: 3;
     font-family: "Press Start 2P", system-ui;
     position: relative;
     cursor: pointer;
