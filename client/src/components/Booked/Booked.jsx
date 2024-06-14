@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react'
 import './style.css'
 import PropTypes from 'prop-types'
-import { getSeatsByBookedId } from '../../http/bookedAPI'
+import { activateBooked, cancelBooked, getSeatsByBookedId } from '../../http/bookedAPI'
+import { useError } from '../../store/ErrorStore'
 
 
 const Booked = ({ booked }) => {
     const [seats, setSeats] = useState([])
+    const { createError } = useError()
 
     const handleCancelBooked = () => {
-
+        cancelBooked(booked.id).then(data => createError(data.message, 200)).catch(e => createError(e.response.data.message, 400))
     }
 
     const handleStartBooked = () => {
-
+        activateBooked(booked.id).then(data => createError(data.message, 200)).catch(e => createError(e.response.data.message, 400))
     }
 
     useEffect(() => {
@@ -38,8 +40,8 @@ const Booked = ({ booked }) => {
                 <p>{`Количество часов: ${booked.hours}`}</p>
                 <p>{`Цена: ${booked.total} ₽`}</p>
             </div>
-            <button className='booked__complete'>Активировать</button>
-            <button className='booked__cancel'>Отменить</button>
+            <button className={booked.status === "PROCESS" ? 'booked__complete booked__process' : 'booked__complete'} disabled={booked.status === 'PROCESS' ? true : false} onClick={() => handleStartBooked()}>Активировать</button>
+            <button className='booked__cancel' onClick={() => handleCancelBooked()}>Отменить</button>
         </div>
     )
 }

@@ -43,7 +43,7 @@ const Header = () => {
                         (
                             <div className='user-balance'>
                                 <img src={BankCardImage} alt="" />
-                                <p>{`${user.balance} ₽`}</p>
+                                <p>{`${Number(user.balance).toFixed(2)} ₽`}</p>
                             </div>
                         ) : ''
                 }

@@ -32,3 +32,12 @@ export const topUpBalance = async (userId, money) => {
         token: data.token
     }
 }
+
+export const tokenUpdate = async () => {
+    const { data } = await $authHost.get('/api/tokenUpdate')
+    localStorage.setItem('token', data.token)
+    return {
+        user: jwtDecode(data.token),
+        token: data.token
+    }
+}

@@ -3,13 +3,14 @@ const prisma = new PrismaClient()
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt')
 
-const generateJwt = (id, role, name, balance) => {
+const generateJwt = (id, role, name, balance, session) => {
     return jwt.sign(
         ({
             id,
             role,
             name,
-            balance
+            balance,
+            session
         }),
         process.env.SECRET_KEY,
         { expiresIn: '3h' })
@@ -66,11 +67,24 @@ class UserController {
             if (!user) {
                 return res.status(400).json({ message: "Неверный логин или пароль" })
             }
+
+            
             const validPassword = await bcrypt.compare(password, user.password)
             if (!validPassword) {
                 return res.status(400).json({ message: "Неверный логин или пароль" })
             }
-            const token = generateJwt(user.id, user.role, user.name, user.balance)
+
+            let session = false
+            const activeBooked = await prisma.booked.findFirst({
+                where: {
+                    userId: user.id,
+                    status: 'PROCESS'
+                    
+                }
+            })
+            if(activeBooked) session = true
+
+            const token = generateJwt(user.id, user.role, user.name, user.balance, session)
             res.json({ token })
 
         } catch (e) {
@@ -99,7 +113,18 @@ class UserController {
                     balance: parseFloat(currentUser.balance) + parseFloat(money)
                 }
             })
-            const token = generateJwt(updatedUser.id, updatedUser.role, updatedUser.name, updatedUser.balance)
+
+            let session = false
+            const activeBooked = await prisma.booked.findFirst({
+                where: {
+                    userId: currentUser.id,
+                    status: 'PROCESS'
+                    
+                }
+            })
+            if(activeBooked) session = true
+
+            const token = generateJwt(updatedUser.id, updatedUser.role, updatedUser.name, updatedUser.balance, session)
             res.json({ token })
 
         } catch (e) {
@@ -109,15 +134,25 @@ class UserController {
     }
 
     async tokenUpdate(req, res) {
-        
         const {id} = req.user
+        
         const user = await prisma.user.findUnique({
             where: {
                 id
             }
         })
 
-        const token = generateJwt(user.id, user.role, user.name, user.balance)
+        let session = false
+            const activeBooked = await prisma.booked.findFirst({
+                where: {
+                    userId: user.id,
+                    status: 'PROCESS'
+                    
+                }
+            })
+            if(activeBooked) session = true
+
+        const token = generateJwt(user.id, user.role, user.name, user.balance, session)
         res.json({ token })
 
     }

@@ -100,7 +100,7 @@ router.post('/register', UserController.register)
 router.post('/login', UserController.login)
 router.get('/auth', authenticateToken, UserController.check)
 router.post('/topUpBalance', authenticateToken, UserController.TopUpBalance)
-router.post('/tokenUpdate', authenticateToken, UserController.tokenUpdate)
+router.get('/tokenUpdate', authenticateToken, UserController.tokenUpdate)
 
 // HALL
 router.post('/registerHall', authenticateToken, checkRole('ADMIN'), uploads.single('image'), HallController.HallRegister)
@@ -115,7 +115,7 @@ router.post('/occupiedSeats', authenticateToken, SeatController.occupiedSeats)
 // BOOKED
 router.get('/getAllBooked', authenticateToken, BookedController.getAllBooked)
 router.get('/getSeatsByBookedId', authenticateToken, BookedController.getSeatsByBookedId)
-router.delete('/cancelBooked', authenticateToken, BookedController.cancelBooked)
+router.delete('/cancelBooked/:bookedId', authenticateToken, BookedController.cancelBooked)
 router.put('/activateBooked', authenticateToken, BookedController.activateBooked)
 
 

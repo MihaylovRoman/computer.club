@@ -11,7 +11,7 @@ export const getSeatsByBookedId = async (bookedId) => {
 }
 
 export const cancelBooked = async (bookedId) => {
-    const { data } = await $authHost.delete('/api/cancelBooked', { bookedId })
+    const { data } = await $authHost.delete(`/api/cancelBooked/${bookedId}`)
     return data
 }
 
